@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valentine's Proposal</title>
     <style>
+        /* Added box-sizing to prevent padding from expanding the width */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             background: #ffeff2;
@@ -25,9 +30,10 @@
             max-width: 400px;
             width: 100%;
             margin-bottom: 20px;
+            overflow: hidden; /* Keeps everything inside the rounded corners */
         }
 
-        h1 { color: #d63384; margin-top: 0; }
+        h1 { color: #d63384; margin-top: 0; font-size: 1.8rem; }
         h2 { color: #ff4d6d; }
         
         .btn {
@@ -46,7 +52,7 @@
 
         input[type="text"] {
             padding: 12px;
-            width: 85%;
+            width: 100%; /* Changed to 100% since box-sizing is fixed */
             border-radius: 10px;
             border: 1px solid #ddd;
             margin-bottom: 15px;
@@ -55,36 +61,33 @@
         
         .hidden { display: none; }
 
-        /* Buy Me a Coffee Section */
+        /* Fixed the luck box overflow */
         .coffee-box {
-            padding: 20px;
+            margin-top: 20px;
+            padding: 15px;
             border-radius: 15px;
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid #ffccd5;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            display: none; /* hidden by default */
+            background: #fffafa;
+            border: 1px dashed #ffccd5;
+            width: 100%; /* Ensures it stays inside container */
+            display: none; 
         }
         
-        .coffee-box h3 { color: #d63384; margin-bottom: 5px; }
-        .coffee-box p { font-size: 0.9rem; color: #444; line-height: 1.5; }
+        .coffee-box h3 { color: #d63384; margin-bottom: 5px; font-size: 1.1rem; }
+        .coffee-box p { font-size: 0.85rem; color: #444; line-height: 1.4; }
         
         .coffee-btn {
             background: #ff4d6d;
             color: white;
             border: none;
-            padding: 14px 28px;
+            padding: 10px 20px;
             border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
             text-decoration: none;
             display: inline-block;
-            transition: 0.2s;
+            font-size: 0.9rem;
+            margin-top: 10px;
         }
-        
-        .coffee-btn:hover { transform: scale(1.05); }
     </style>
 </head>
 <body>
@@ -93,23 +96,20 @@
         <div id="setup">
             <h1>Create a Proposal</h1>
             <input type="text" id="valentineName" placeholder="Enter their name...">
-            <br>
-            <label style="color: #666; font-size: 0.9rem;">
+            <input type="text" id="senderName" placeholder="Your name...">
+            
+            <label style="color: #666; font-size: 0.85rem; display: block; margin-bottom: 15px;">
                 <input type="checkbox" id="unclickableNo"> Make 'No' unclickable?
             </label>
-            <br><br>
-            <button class="btn" id="yesBtn" onclick="generateLink()">Generate Link</button>
-            <p id="resultLink" style="word-break: break-all; color: #d63384; font-weight: bold; margin-top: 15px;"></p>
+            
+            <button class="btn" id="generateBtn" onclick="generateLink()" style="background: #d63384; color: white; width: 100%; margin: 0;">Generate Link</button>
+            
+            <p id="resultLink" style="word-break: break-all; color: #d63384; font-weight: bold; margin-top: 15px; font-size: 0.9rem;"></p>
 
-            <!-- Coffee box hidden initially -->
             <div class="coffee-box" id="coffeeBox">
-                <h3>🍀 Want to Boost Your Luck?</h3>
-                <p>
-                    Legend says buying the developer a coffee grants <b>+100 Karma</b> to your proposal.<br><br>
-                </p>
-                <a href="https://buymeacoffee.com/apaul" target="_blank" class="coffee-btn">
-                    💝 Buy Me a Coffee
-                </a>
+                <h3>🍀 Boost Your Luck?</h3>
+                <p>Buying the developer a coffee grants <b>+100 Karma</b> to your proposal.</p>
+                <a href="https://buymeacoffee.com/apaul" target="_blank" class="coffee-btn">💝 Buy Me a Coffee</a>
             </div>
         </div>
 
@@ -117,7 +117,7 @@
             <h1 id="displayMessage">Will you be my Valentine?</h1>
             <div id="buttonContainer">
                 <button class="btn" id="yesBtn" onclick="celebrate()">Yes</button>
-                <button class="btn" id="noBtn">No</button>
+                <button class="btn" id="noBtn" onclick="sadMessage()">No</button>
             </div>
         </div>
     </div>
@@ -125,9 +125,9 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const vName = urlParams.get('name');
+        const sName = urlParams.get('sender');
         const restrictNo = urlParams.get('no') === 'true';
 
-        // Initialize Page View
         if (vName) {
             document.getElementById('setup').classList.add('hidden');
             document.getElementById('proposal').classList.remove('hidden');
@@ -147,25 +147,38 @@
 
         function generateLink() {
             const name = document.getElementById('valentineName').value;
+            const sender = document.getElementById('senderName').value;
             const isUnclickable = document.getElementById('unclickableNo').checked;
-            if (!name) return alert("Please enter a name first!");
+            
+            if (!name || !sender) return alert("Please enter both names first!");
 
             const baseUrl = window.location.origin + window.location.pathname;
-            const finalUrl = `${baseUrl}?name=${encodeURIComponent(name)}&no=${isUnclickable}`;
+            const finalUrl = `${baseUrl}?name=${encodeURIComponent(name)}&sender=${encodeURIComponent(sender)}&no=${isUnclickable}`;
 
             const linkDisplay = document.getElementById('resultLink');
             linkDisplay.innerHTML = `Copy & send this link: <br><a href="${finalUrl}" style="color: #4caf50;">${finalUrl}</a>`;
 
-            // Show coffee box after generating link
             document.getElementById('coffeeBox').style.display = 'block';
         }
 
         function celebrate() {
+            const senderDisplay = sName ? `- ${sName}` : "";
             document.querySelector('.container').innerHTML = `
-                <h1 style="font-size: 3.5rem; margin-bottom: 5px;">YAY!!!</h1>
-                <h2 style="margin-top: 0;">Best decision ever</h2>
-                <img src="yay.gif" alt="Yay GIF" style="width: 100%; max-width: 280px; border-radius: 15px; margin: 15px 0;">
-                <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2rem;">I love you ❤️</h2>
+                <h1 style="font-size: 2.5rem; margin-bottom: 5px;">YAY!!!</h1>
+                <h2 style="color: #4caf50; margin: 10px 0;">${senderDisplay}</h2>
+                <p style="font-size: 1.2rem; color: #ff4d6d;">Best decision ever!</p>
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmo3Z3Y0eHBybmZpZ3R3bmZpZ3R3bmZpZ3R3bmZpZ3R3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c7QYfBwH2QkKs/giphy.gif" alt="Yay GIF" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
+                <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2rem; color: #d63384;">I love you! ❤️</h2>
+            `;
+        }
+
+        function sadMessage() {
+            document.querySelector('.container').innerHTML = `
+                <h1 style="font-size: 2rem; color: #666;">Oh no... 💔</h1>
+                <p>My heart is breaking...</p>
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWY5MGY0YzU0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/9Y5BbDSkSTiY8/giphy.gif" alt="Sad GIF" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
+                <p>Maybe reconsider?</p>
+                <button class="btn" onclick="location.reload()" style="background: #ddd; color: #333;">Try Again?</button>
             `;
         }
     </script>
