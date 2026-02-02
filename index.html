@@ -84,6 +84,11 @@
             margin-top: 10px;
         }
         .action-btn { width: 100%; margin: 5px 0; font-size: 0.9rem; }
+
+        footer {
+            margin-top: 30px;
+            padding-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -113,6 +118,12 @@
             </div>
         </div>
     </div>
+
+    <footer>
+        <a href="https://hits.seeyoufarm.com">
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemylove.info&count_bg=%23ff4d6d&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false"/>
+        </a>
+    </footer>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -178,7 +189,7 @@
             document.getElementById('mainContainer').innerHTML = `
                 <h1 style="font-size: 2rem; color: #666;">Oh no... 💔</h1>
                 <p>My heart is breaking...</p>
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWY5MGY0YzU0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/9Y5BbDSkSTiY8/giphy.gif" alt="Sad" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWY5MGY0YzU0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9iZCZjdD1n/9Y5BbDSkSTiY8/giphy.gif" alt="Sad" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
                 <button class="btn" onclick="location.reload()" style="background: #ddd; color: #333;">Try Again?</button>
             `;
         }
