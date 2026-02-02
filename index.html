@@ -77,7 +77,6 @@
             margin-top: 10px;
         }
         .action-btn { width: 100%; margin: 5px 0; font-size: 0.9rem; }
-        #statusMsg { font-size: 0.75rem; color: #888; margin-top: 8px; font-style: italic; }
     </style>
 </head>
 <body>
@@ -92,7 +91,6 @@
             </label>
             <button class="btn" id="generateBtn" onclick="generateLink()" style="background: #d63384; color: white; width: 100%; margin: 0;">Generate Link</button>
             <p id="resultLink" style="word-break: break-all; color: #d63384; font-weight: bold; margin-top: 15px; font-size: 0.9rem;"></p>
-            
             <div class="coffee-box" id="coffeeBox">
                 <h3>🍀 Boost Your Luck?</h3>
                 <p>Buying the developer a coffee grants <b>+100 Karma</b>.</p>
@@ -110,7 +108,6 @@
     </div>
 
     <script>
-        // URL Logic to check if this is a proposal view
         const urlParams = new URLSearchParams(window.location.search);
         const vName = urlParams.get('name');
         const sName = urlParams.get('sender');
@@ -120,7 +117,6 @@
             document.getElementById('setup').classList.add('hidden');
             document.getElementById('proposal').classList.remove('hidden');
             document.getElementById('displayMessage').innerText = `${vName}, will you be my Valentine? ❤️`;
-            
             const noBtn = document.getElementById('noBtn');
             if (restrictNo) {
                 noBtn.onmouseover = () => {
@@ -133,105 +129,55 @@
             }
         }
 
-        // Generate the custom URL
         function generateLink() {
             const name = document.getElementById('valentineName').value;
             const sender = document.getElementById('senderName').value;
             const isUnclickable = document.getElementById('unclickableNo').checked;
-            
             if (!name || !sender) return alert("Please enter both names first!");
-            
             const baseUrl = window.location.origin + window.location.pathname;
             const finalUrl = `${baseUrl}?name=${encodeURIComponent(name)}&sender=${encodeURIComponent(sender)}&no=${isUnclickable}`;
-            
             document.getElementById('resultLink').innerHTML = `Copy & send this: <br><a href="${finalUrl}" style="color: #4caf50;">${finalUrl}</a>`;
             document.getElementById('coffeeBox').style.display = 'block';
         }
 
-        // Celebration Logic
         function celebrate() {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             const senderDisplay = sName ? `- ${sName}` : "";
+            
+
+            const githubGifUrl = "https://github.com/paul-akshay/project-valentine/blob/35c524326a9756c8b050c0ad5873f7f197bd33d4/yay.gif";
 
             document.getElementById('mainContainer').innerHTML = `
-                <div id="captureArea" style="background: white; padding: 20px; border-radius: 15px;">
+                <div id="captureArea" style="background: white; padding: 10px; border-radius: 15px;">
                     <h1 style="font-size: 2.5rem; margin-bottom: 5px;">YAY!!!</h1>
                     <p style="font-size: 1.2rem; color: #ff4d6d; margin: 5px 0;">Best decision ever!</p>
-                    <img src="yay.gif" alt="Yay GIF" style="width: 100%; max-width: 280px; border-radius: 15px; margin: 15px 0;">
+                   <img src="yay.gif" alt="Yay GIF" style="width: 100%; max-width: 280px; border-radius: 15px; margin: 15px 0;">
                     <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2rem; color: #d63384; margin-bottom: 0;">I love you! ❤️</h2>
                     <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2.2rem; color: #d63384; margin-top: 0;">${senderDisplay}</h2>
                 </div>
                 <div style="margin-top: 15px;">
-                    <button class="btn action-btn" id="smartShareBtn" onclick="handleShare()" style="background: #d63384; color: white;"> 
-                        💝 Share with my love!
-                    </button>
-                    <p id="statusMsg"></p>
+                    <button class="btn action-btn" onclick="downloadImage()" style="background: #333; color: white;"> Share with your love!</button>
                 </div>
             `;
+            if (navigator.share) document.getElementById('shareBtn').style.display = 'block';
         }
 
-        // SMART SHARE FUNCTION: Phone Share Sheet vs Desktop Download
-        async function handleShare() {
-            const btn = document.getElementById('smartShareBtn');
-            const status = document.getElementById('statusMsg');
-            const originalText = btn.innerText;
-            
-            btn.innerText = "Generating Card...";
-            btn.disabled = true;
-            
-            try {
-                const element = document.getElementById('captureArea');
-                // Use html2canvas to turn the HTML into an image
-                const canvas = await html2canvas(element, { 
-                    useCORS: true, 
-                    backgroundColor: "#ffffff",
-                    scale: 2 
-                });
+        async function downloadImage() {
+            const element = document.getElementById('captureArea');
+            const canvas = await html2canvas(element, { useCORS: true, backgroundColor: "#ffffff" });
+            const link = document.createElement('a');
+            link.download = 'proposal-accepted.png';
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        }
 
-                canvas.toBlob(async (blob) => {
-                    if (!blob) {
-                        alert("Image generation failed.");
-                        return;
-                    }
-
-                    const file = new File([blob], 'proposal-accepted.png', { type: 'image/png' });
-
-                    // 1. Check if the browser supports Native File Sharing (Mobile)
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                        try {
-                            await navigator.share({
-                                files: [file],
-                                title: 'Accepted!',
-                                text: 'Best news ever! ❤️'
-                            });
-                            btn.innerText = originalText;
-                            btn.disabled = false;
-                        } catch (err) {
-                            // If user cancels sharing, just reset button
-                            btn.innerText = originalText;
-                            btn.disabled = false;
-                            console.log("Share cancelled or failed:", err);
-                        }
-                    } 
-                    // 2. Failsafe for Desktop (Chrome/Safari/Firefox on PC)
-                    else {
-                        const link = document.createElement('a');
-                        link.download = 'valentine-card.png';
-                        link.href = canvas.toDataURL("image/png");
-                        link.click();
-                        
-                        status.innerText = "Note: Native sharing not supported. Image downloaded to your device!";
-                        btn.innerText = originalText;
-                        btn.disabled = false;
-                    }
-                }, 'image/png');
-
-            } catch (error) {
-                console.error("Capture Error:", error);
-                alert("Could not generate image. Try taking a screenshot!");
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
+        async function shareImage() {
+            const element = document.getElementById('captureArea');
+            const canvas = await html2canvas(element, { useCORS: true, backgroundColor: "#ffffff" });
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], 'proposal.png', { type: 'image/png' });
+                try { await navigator.share({ files: [file], title: 'Accepted!', text: '❤️' }); } catch (err) {}
+            });
         }
 
         function sadMessage() {
