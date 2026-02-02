@@ -9,103 +9,164 @@
             font-family: 'Arial', sans-serif;
             background: #ffeff2;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
             text-align: center;
         }
+
         .container {
             background: white;
             padding: 2rem;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             max-width: 400px;
-            width: 90%;
+            width: 100%;
         }
-        h1 { color: #d63384; }
+
+        h1 { color: #d63384; margin-top: 0; }
+        h2 { color: #ff4d6d; }
+        
         .btn {
-            padding: 10px 25px;
+            padding: 12px 28px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             font-size: 1.1rem;
             margin: 10px;
             transition: 0.3s;
+            font-weight: bold;
         }
+        
         #yesBtn { background: #4caf50; color: white; }
         #noBtn { background: #f44336; color: white; position: relative; }
+
         input[type="text"] {
-            padding: 10px;
-            width: 80%;
-            border-radius: 5px;
+            padding: 12px;
+            width: 85%;
+            border-radius: 10px;
             border: 1px solid #ddd;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1rem;
         }
+        
         .hidden { display: none; }
+
+        /* Buy Me a Coffee Section */
+        .coffee-box {
+            margin-top: 40px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid #ffccd5;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .coffee-box h3 { color: #d63384; margin-bottom: 5px; }
+        .coffee-box p { font-size: 0.9rem; color: #444; line-height: 1.5; }
+        
+        .coffee-btn {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.2s;
+        }
+        
+        .coffee-btn:hover { transform: scale(1.05); }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="setup">
-        <h1>Create a Proposal</h1>
-        <input type="text" id="valentineName" placeholder="Enter their name...">
-        <br>
-        <label><input type="checkbox" id="unclickableNo"> Make 'No' unclickable?</label>
-        <br><br>
-        <button class="btn" id="yesBtn" onclick="generateLink()">Generate Link</button>
-        <p id="resultLink" style="word-break: break-all; color: #d63384; font-weight: bold;"></p>
-    </div>
+    <div class="container">
+        <div id="setup">
+            <h1>Create a Proposal</h1>
+            <input type="text" id="valentineName" placeholder="Enter their name...">
+            <br>
+            <label style="color: #666; font-size: 0.9rem;">
+                <input type="checkbox" id="unclickableNo"> Make 'No' unclickable?
+            </label>
+            <br><br>
+            <button class="btn" id="yesBtn" onclick="generateLink()">Generate Link</button>
+            <p id="resultLink" style="word-break: break-all; color: #d63384; font-weight: bold; margin-top: 15px;"></p>
+        </div>
 
-    <div id="proposal" class="hidden">
-        <h1 id="displayMessage">Will you be my Valentine?</h1>
-        <div id="buttonContainer">
-            <button class="btn" id="yesBtn" onclick="celebrate()">Yes</button>
-            <button class="btn" id="noBtn">No</button>
+        <div id="proposal" class="hidden">
+            <h1 id="displayMessage">Will you be my Valentine?</h1>
+            <div id="buttonContainer">
+                <button class="btn" id="yesBtn" onclick="celebrate()">Yes</button>
+                <button class="btn" id="noBtn">No</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const vName = urlParams.get('name');
-    const restrictNo = urlParams.get('no') === 'true';
+    <div class="coffee-box">
+        <h3>🍀 Want to Boost Your Luck?</h3>
+        <p>
+            Legend says buying the developer a coffee grants <b>+100 Karma</b> to your proposal.<br><br>
+        </p>
+        <p style="font-size: 0.75rem; color: #888; margin-bottom: 15px;">
+       
+        </p>
+        <a href="https://buymeacoffee.com/apaul" target="_blank" class="coffee-btn">
+            💝 Buy Me a Coffee
+        </a>
+    </div>
 
-    // Logic to switch views
-    if (vName) {
-        document.getElementById('setup').classList.add('hidden');
-        document.getElementById('proposal').classList.remove('hidden');
-        document.getElementById('displayMessage').innerText = `${vName}, will you be my Valentine? ❤️`;
-        
-        const noBtn = document.getElementById('noBtn');
-        if (restrictNo) {
-            noBtn.onmouseover = () => {
-                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-                noBtn.style.position = 'absolute';
-                noBtn.style.left = x + 'px';
-                noBtn.style.top = y + 'px';
-            };
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const vName = urlParams.get('name');
+        const restrictNo = urlParams.get('no') === 'true';
+
+        // Initialize Page View
+        if (vName) {
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('proposal').classList.remove('hidden');
+            document.getElementById('displayMessage').innerText = `${vName}, will you be my Valentine? ❤️`;
+
+            const noBtn = document.getElementById('noBtn');
+            if (restrictNo) {
+                // The "Runaway" No Button logic
+                noBtn.onmouseover = () => {
+                    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+                    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+                    noBtn.style.position = 'fixed'; // Use fixed to ensure it moves relative to screen
+                    noBtn.style.left = x + 'px';
+                    noBtn.style.top = y + 'px';
+                };
+            }
         }
-    }
 
-    function generateLink() {
-        const name = document.getElementById('valentineName').value;
-        const isUnclickable = document.getElementById('unclickableNo').checked;
-        if (!name) return alert("Please enter a name!");
-        
-        const baseUrl = window.location.origin + window.location.pathname;
-        const finalUrl = `${baseUrl}?name=${encodeURIComponent(name)}&no=${isUnclickable}`;
-        
-        const linkDisplay = document.getElementById('resultLink');
-        linkDisplay.innerHTML = `Share this link: <br><a href="${finalUrl}">${finalUrl}</a>`;
-    }
+        function generateLink() {
+            const name = document.getElementById('valentineName').value;
+            const isUnclickable = document.getElementById('unclickableNo').checked;
+            if (!name) return alert("Please enter a name first!");
 
-    function celebrate() {
-        document.querySelector('.container').innerHTML = "<h1>Yay! See you on the 14th! 🌹❤️</h1>";
-    }
-</script>
+            const baseUrl = window.location.origin + window.location.pathname;
+            const finalUrl = `${baseUrl}?name=${encodeURIComponent(name)}&no=${isUnclickable}`;
+
+            const linkDisplay = document.getElementById('resultLink');
+            linkDisplay.innerHTML = `Copy & send this link: <br><a href="${finalUrl}" style="color: #4caf50;">${finalUrl}</a>`;
+        }
+
+        function celebrate() {
+            document.querySelector('.container').innerHTML = `
+                <h1 style="font-size: 3.5rem; margin-bottom: 5px;">YAY!!!</h1>
+                <h2 style="margin-top: 0;">Best decision ever</h2>
+                <img src="yay.gif" alt="Yay GIF" style="width: 100%; max-width: 280px; border-radius: 15px; margin: 15px 0;">
+                <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2rem;">I love you ❤️</h2>
+            `;
+        }
+    </script>
 
 </body>
 </html>
