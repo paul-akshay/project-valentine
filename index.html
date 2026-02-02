@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valentine's Proposal</title>
+    
+    <script type="text/javascript">
+        aclib.runAutoTag({
+            zoneId: 'gcspbvx55w',
+        });
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -143,9 +150,6 @@
         function celebrate() {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             const senderDisplay = sName ? `- ${sName}` : "";
-            
-
-            const githubGifUrl = "https://github.com/paul-akshay/project-valentine/blob/35c524326a9756c8b050c0ad5873f7f197bd33d4/yay.gif";
 
             document.getElementById('mainContainer').innerHTML = `
                 <div id="captureArea" style="background: white; padding: 10px; border-radius: 15px;">
@@ -159,7 +163,6 @@
                     <button class="btn action-btn" onclick="downloadImage()" style="background: #333; color: white;"> Share with your love!</button>
                 </div>
             `;
-            if (navigator.share) document.getElementById('shareBtn').style.display = 'block';
         }
 
         async function downloadImage() {
@@ -169,15 +172,6 @@
             link.download = 'proposal-accepted.png';
             link.href = canvas.toDataURL("image/png");
             link.click();
-        }
-
-        async function shareImage() {
-            const element = document.getElementById('captureArea');
-            const canvas = await html2canvas(element, { useCORS: true, backgroundColor: "#ffffff" });
-            canvas.toBlob(async (blob) => {
-                const file = new File([blob], 'proposal.png', { type: 'image/png' });
-                try { await navigator.share({ files: [file], title: 'Accepted!', text: '❤️' }); } catch (err) {}
-            });
         }
 
         function sadMessage() {
