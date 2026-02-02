@@ -24,6 +24,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             max-width: 400px;
             width: 100%;
+            margin-bottom: 20px;
         }
 
         h1 { color: #d63384; margin-top: 0; }
@@ -56,13 +57,14 @@
 
         /* Buy Me a Coffee Section */
         .coffee-box {
-            margin-top: 40px;
             padding: 20px;
             border-radius: 15px;
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid #ffccd5;
             max-width: 400px;
             width: 100%;
+            text-align: center;
+            display: none; /* hidden by default */
         }
         
         .coffee-box h3 { color: #d63384; margin-bottom: 5px; }
@@ -98,6 +100,17 @@
             <br><br>
             <button class="btn" id="yesBtn" onclick="generateLink()">Generate Link</button>
             <p id="resultLink" style="word-break: break-all; color: #d63384; font-weight: bold; margin-top: 15px;"></p>
+
+            <!-- Coffee box hidden initially -->
+            <div class="coffee-box" id="coffeeBox">
+                <h3>🍀 Want to Boost Your Luck?</h3>
+                <p>
+                    Legend says buying the developer a coffee grants <b>+100 Karma</b> to your proposal.<br><br>
+                </p>
+                <a href="https://buymeacoffee.com/apaul" target="_blank" class="coffee-btn">
+                    💝 Buy Me a Coffee
+                </a>
+            </div>
         </div>
 
         <div id="proposal" class="hidden">
@@ -107,19 +120,6 @@
                 <button class="btn" id="noBtn">No</button>
             </div>
         </div>
-    </div>
-
-    <div class="coffee-box">
-        <h3>🍀 Want to Boost Your Luck?</h3>
-        <p>
-            Legend says buying the developer a coffee grants <b>+100 Karma</b> to your proposal.<br><br>
-        </p>
-        <p style="font-size: 0.75rem; color: #888; margin-bottom: 15px;">
-       
-        </p>
-        <a href="https://buymeacoffee.com/apaul" target="_blank" class="coffee-btn">
-            💝 Buy Me a Coffee
-        </a>
     </div>
 
     <script>
@@ -135,11 +135,10 @@
 
             const noBtn = document.getElementById('noBtn');
             if (restrictNo) {
-                // The "Runaway" No Button logic
                 noBtn.onmouseover = () => {
                     const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
                     const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-                    noBtn.style.position = 'fixed'; // Use fixed to ensure it moves relative to screen
+                    noBtn.style.position = 'fixed';
                     noBtn.style.left = x + 'px';
                     noBtn.style.top = y + 'px';
                 };
@@ -156,6 +155,9 @@
 
             const linkDisplay = document.getElementById('resultLink');
             linkDisplay.innerHTML = `Copy & send this link: <br><a href="${finalUrl}" style="color: #4caf50;">${finalUrl}</a>`;
+
+            // Show coffee box after generating link
+            document.getElementById('coffeeBox').style.display = 'block';
         }
 
         function celebrate() {
