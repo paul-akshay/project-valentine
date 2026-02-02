@@ -151,13 +151,12 @@
                 <div id="captureArea" style="background: white; padding: 10px; border-radius: 15px;">
                     <h1 style="font-size: 2.5rem; margin-bottom: 5px;">YAY!!!</h1>
                     <p style="font-size: 1.2rem; color: #ff4d6d; margin: 5px 0;">Best decision ever!</p>
-                    <img src="${githubGifUrl}" crossorigin="anonymous" alt="Yay GIF" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
+                   <img src="yay.gif" alt="Yay GIF" style="width: 100%; max-width: 280px; border-radius: 15px; margin: 15px 0;">
                     <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2rem; color: #d63384; margin-bottom: 0;">I love you! ❤️</h2>
                     <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2.2rem; color: #d63384; margin-top: 0;">${senderDisplay}</h2>
                 </div>
                 <div style="margin-top: 15px;">
-                    <button class="btn action-btn" onclick="downloadImage()" style="background: #333; color: white;">💾 Download Receipt</button>
-                    <button class="btn action-btn" id="shareBtn" onclick="shareImage()" style="background: #007aff; color: white; display: none;">📱 Share</button>
+                    <button class="btn action-btn" onclick="downloadImage()" style="background: #333; color: white;"> Share with your love!</button>
                 </div>
             `;
             if (navigator.share) document.getElementById('shareBtn').style.display = 'block';
