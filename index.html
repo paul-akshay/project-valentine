@@ -58,21 +58,24 @@
         </div>
     </div>
 
-    <footer>
-    </footer>
+    <footer></footer>
 
     <script>
-        // 2. AD TRIGGER FUNCTION
+        // Modified Ad Trigger with safety checks
         function triggerAd() {
-            if (typeof aclib !== 'undefined') {
-                aclib.runAutoTag({
-                    zoneId: 'gcspbvx55w',
-                });
+            try {
+                if (window.aclib && typeof window.aclib.runAutoTag === 'function') {
+                    window.aclib.runAutoTag({
+                        zoneId: 'gcspbvx55w',
+                    });
+                }
+            } catch (e) {
+                console.warn("Ad script blocked or failed to load.");
             }
         }
 
         function safeClick(e, callback) {
-            e.stopPropagation();
+            if (e) e.stopPropagation();
             if (callback) callback();
         }
 
@@ -111,7 +114,7 @@
         }
 
         function celebrate() {
-            // 3. TRIGGER AD ONLY ON "YES" CLICK
+            // Fails gracefully if ad is blocked
             triggerAd();
 
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
@@ -131,7 +134,6 @@
             `;
         }
 
-        // ... remaining functions (sadMessage, shareOrDownload) stay the same ...
         function sadMessage() {
             document.getElementById('mainContainer').innerHTML = `
                 <h1 style="font-size: 2rem; color: #666;">Oh no... 💔</h1>
@@ -140,6 +142,7 @@
                 <button class="btn" onclick="location.reload()" style="background: #ddd; color: #333;">Try Again?</button>
             `;
         }
+
         async function shareOrDownload() {
             const imageUrl = "https://bemylove.info/proposal_accepted_1.png";
             if (navigator.share) {
