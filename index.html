@@ -21,6 +21,7 @@
     </script>
 
     <style>
+        /* ... existing styles remain same ... */
         * { box-sizing: border-box; }
         body {
             font-family: 'Arial', sans-serif;
@@ -97,32 +98,32 @@
     <div class="container" id="mainContainer">
         <div id="setup">
             <h1>Create a Proposal</h1>
-            <input type="text" id="valentineName" placeholder="Enter their name...">
-            <input type="text" id="senderName" placeholder="Your name...">
-            <label style="color: #666; font-size: 0.85rem; display: block; margin-bottom: 15px;">
+            <input type="text" id="valentineName" placeholder="Enter their name..." onclick="event.stopPropagation()">
+            <input type="text" id="senderName" placeholder="Your name..." onclick="event.stopPropagation()">
+            <label style="color: #666; font-size: 0.85rem; display: block; margin-bottom: 15px;" onclick="event.stopPropagation()">
                 <input type="checkbox" id="unclickableNo"> Make 'No' unclickable?
             </label>
-            <button class="btn" id="generateBtn" onclick="generateLink()" style="background: #d63384; color: white; width: 100%; margin: 0;">Generate Link</button>
+            <button class="btn" id="generateBtn" onclick="safeClick(event, generateLink)" style="background: #d63384; color: white; width: 100%; margin: 0;">Generate Link</button>
             <p id="resultLink" style="word-break: break-all; color: #d63384; font-weight: bold; margin-top: 15px; font-size: 0.9rem;"></p>
             
             <div class="coffee-box" id="coffeeBox">
                 <h3>🍀 Boost Your Luck?</h3>
                 <p>Buying the developer a coffee grants <b>+100 Karma</b>.</p>
-                <a href="https://buymeacoffee.com/apaul" target="_blank" class="coffee-btn">💝 Buy Me a Coffee</a>
+                <a href="https://buymeacoffee.com/apaul" target="_blank" class="coffee-btn" onclick="event.stopPropagation()">💝 Buy Me a Coffee</a>
             </div>
         </div>
 
         <div id="proposal" class="hidden">
             <h1 id="displayMessage">Will you be my Valentine?</h1>
             <div id="buttonContainer">
-                <button class="btn" id="yesBtn" onclick="celebrate()">Yes</button>
-                <button class="btn" id="noBtn" onclick="sadMessage()">No</button>
+                <button class="btn" id="yesBtn" onclick="safeClick(event, celebrate)">Yes</button>
+                <button class="btn" id="noBtn" onclick="safeClick(event, sadMessage)">No</button>
             </div>
         </div>
     </div>
 
     <footer>
-        <a href="https://hits.seeyoufarm.com">
+        <a href="https://hits.seeyoufarm.com" onclick="event.stopPropagation()">
             <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemylove.info&count_bg=%23ff4d6d&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" 
                  alt="Hits Counter" 
                  onerror="this.style.display='none'">
@@ -130,6 +131,12 @@
     </footer>
 
     <script>
+        // NEW: Ad Prevention Wrapper
+        function safeClick(e, callback) {
+            e.stopPropagation(); // Prevents Monetag from seeing the click
+            callback();
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const vName = urlParams.get('name');
         const sName = urlParams.get('sender');
@@ -142,7 +149,8 @@
             
             if (restrictNo) {
                 const noBtn = document.getElementById('noBtn');
-                noBtn.onmouseover = () => {
+                noBtn.onmouseover = (e) => {
+                    e.stopPropagation();
                     const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
                     const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
                     noBtn.style.position = 'fixed';
@@ -160,7 +168,7 @@
             
             const baseUrl = window.location.origin + window.location.pathname;
             const finalUrl = `${baseUrl}?name=${encodeURIComponent(name)}&sender=${encodeURIComponent(sender)}&no=${isUnclickable}`;
-            document.getElementById('resultLink').innerHTML = `Copy & send this: <br><a href="${finalUrl}" style="color: #4caf50;">${finalUrl}</a>`;
+            document.getElementById('resultLink').innerHTML = `Copy & send this: <br><a href="${finalUrl}" style="color: #4caf50;" onclick="event.stopPropagation()">${finalUrl}</a>`;
             document.getElementById('coffeeBox').style.display = 'block';
         }
 
@@ -177,7 +185,7 @@
                     <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2.2rem; color: #d63384; margin-top: 0;">${senderDisplay}</h2>
                 </div>
                 <div style="margin-top: 15px;">
-                    <button class="btn action-btn" onclick="shareOrDownload()" style="background: #ff4d6d; color: white;">💝 Share with your love!</button>
+                    <button class="btn action-btn" onclick="safeClick(event, shareOrDownload)" style="background: #ff4d6d; color: white;">💝 Share with your love!</button>
                 </div>
             `;
         }
@@ -220,7 +228,7 @@
                 <h1 style="font-size: 2rem; color: #666;">Oh no... 💔</h1>
                 <p>My heart is breaking...</p>
                 <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWY5MGY0YzU0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9iZCZjdD1n/9Y5BbDSkSTiY8/giphy.gif" alt="Sad" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
-                <button class="btn" onclick="location.reload()" style="background: #ddd; color: #333;">Try Again?</button>
+                <button class="btn" onclick="safeClick(event, () => location.reload())" style="background: #ddd; color: #333;">Try Again?</button>
             `;
         }
     </script>
