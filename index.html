@@ -9,87 +9,25 @@
     <script src="https://quge5.com/88/tag.min.js" data-zone="208095" async data-cfasync="false"></script>
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8512c048-3265-4668-a5fe-3b3e00223271"></script>
     <script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <script type="text/javascript">
-        document.getElementById('aclib').onload = function() {
-            aclib.runAutoTag({
-                zoneId: 'gcspbvx55w',
-            });
-        };
-    </script>
-
     <style>
-        /* ... existing styles remain same ... */
+        /* ... styles remain the same ... */
         * { box-sizing: border-box; }
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #ffeff2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 100%;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
+        body { font-family: 'Arial', sans-serif; background: #ffeff2; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
+        .container { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; width: 100%; margin-bottom: 20px; overflow: hidden; }
         h1 { color: #d63384; margin-top: 0; font-size: 1.8rem; }
         h2 { color: #ff4d6d; }
-        .btn {
-            padding: 12px 28px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            margin: 10px;
-            transition: 0.3s;
-            font-weight: bold;
-        }
+        .btn { padding: 12px 28px; border: none; border-radius: 50px; cursor: pointer; font-size: 1.1rem; margin: 10px; transition: 0.3s; font-weight: bold; }
         #yesBtn { background: #4caf50; color: white; }
         #noBtn { background: #f44336; color: white; position: relative; z-index: 10; }
         .action-btn { width: 100%; margin: 5px 0; font-size: 0.9rem; }
-        input[type="text"] {
-            padding: 12px;
-            width: 100%;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            margin-bottom: 15px;
-            font-size: 1rem;
-        }
+        input[type="text"] { padding: 12px; width: 100%; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; font-size: 1rem; }
         .hidden { display: none; }
-        .coffee-box {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 15px;
-            background: #fffafa;
-            border: 1px dashed #ffccd5;
-            width: 100%;
-            display: none; 
-        }
-        .coffee-btn {
-            background: #ff4d6d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 0.9rem;
-            margin-top: 10px;
-        }
+        .coffee-box { margin-top: 20px; padding: 15px; border-radius: 15px; background: #fffafa; border: 1px dashed #ffccd5; width: 100%; display: none; }
+        .coffee-btn { background: #ff4d6d; color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; font-size: 0.9rem; margin-top: 10px; }
         footer { margin-top: 30px; padding-bottom: 20px; }
     </style>
 </head>
@@ -116,24 +54,33 @@
         <div id="proposal" class="hidden">
             <h1 id="displayMessage">Will you be my Valentine?</h1>
             <div id="buttonContainer">
-                <button class="btn" id="yesBtn" onclick="safeClick(event, celebrate)">Yes</button>
-                <button class="btn" id="noBtn" onclick="safeClick(event, sadMessage)">No</button>
+                <button class="btn" id="yesBtn" onclick="celebrate()">Yes</button>
+                <button class="btn" id="noBtn" onclick="sadMessage()">No</button>
             </div>
         </div>
     </div>
 
     <footer>
         <a href="https://hits.seeyoufarm.com" onclick="event.stopPropagation()">
-            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemylove.info&count_bg=%23ff4d6d&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" 
-                 alt="Hits Counter" 
-                 onerror="this.style.display='none'">
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemylove.info&count_bg=%23ff4d6d&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" alt="Hits Counter">
         </a>
     </footer>
 
     <script>
-        // NEW: Ad Prevention Wrapper
+        // Use a flag to ensure the ad only triggers once
+        let adTriggered = false;
+
+        function triggerAd() {
+            if (!adTriggered && typeof aclib !== 'undefined') {
+                aclib.runAutoTag({
+                    zoneId: 'gcspbvx55w',
+                });
+                adTriggered = true;
+            }
+        }
+
         function safeClick(e, callback) {
-            e.stopPropagation(); // Prevents Monetag from seeing the click
+            e.stopPropagation();
             callback();
         }
 
@@ -150,7 +97,6 @@
             if (restrictNo) {
                 const noBtn = document.getElementById('noBtn');
                 noBtn.onmouseover = (e) => {
-                    e.stopPropagation();
                     const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
                     const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
                     noBtn.style.position = 'fixed';
@@ -173,6 +119,9 @@
         }
 
         function celebrate() {
+            // TRIGGER THE AD HERE
+            triggerAd();
+
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             const senderDisplay = sName ? `- ${sName}` : "";
 
@@ -185,33 +134,33 @@
                     <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2.2rem; color: #d63384; margin-top: 0;">${senderDisplay}</h2>
                 </div>
                 <div style="margin-top: 15px;">
-                    <button class="btn action-btn" onclick="safeClick(event, shareOrDownload)" style="background: #ff4d6d; color: white;">💝 Share with your love!</button>
+                    <button class="btn action-btn" onclick="shareOrDownload()" style="background: #ff4d6d; color: white;">💝 Share with your love!</button>
                 </div>
+            `;
+        }
+
+        function sadMessage() {
+            document.getElementById('mainContainer').innerHTML = `
+                <h1 style="font-size: 2rem; color: #666;">Oh no... 💔</h1>
+                <p>My heart is breaking...</p>
+                <img src="https://media.giphy.com/media/9Y5BbDSkSTiY8/giphy.gif" alt="Sad" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
+                <button class="btn" onclick="location.reload()" style="background: #ddd; color: #333;">Try Again?</button>
             `;
         }
 
         async function shareOrDownload() {
             const imageUrl = "https://bemylove.info/proposal_accepted_1.png";
             const shareTitle = "YES! ❤️";
-            const shareText = "With all my heart, I accept—because loving you is my favorite decision 💖";
+            const shareText = "With all my heart, I accept!";
 
             if (navigator.share) {
                 try {
                     const response = await fetch(imageUrl);
                     const blob = await response.blob();
                     const file = new File([blob], 'proposal.png', { type: 'image/png' });
-
-                    await navigator.share({
-                        title: shareTitle,
-                        text: shareText,
-                        files: [file]
-                    });
+                    await navigator.share({ title: shareTitle, text: shareText, files: [file] });
                 } catch (err) {
-                    navigator.share({
-                        title: shareTitle,
-                        text: shareText,
-                        url: window.location.href
-                    }).catch(console.error);
+                    navigator.share({ title: shareTitle, text: shareText, url: window.location.href }).catch(console.error);
                 }
             } else {
                 const link = document.createElement('a');
@@ -221,15 +170,6 @@
                 link.click();
                 document.body.removeChild(link);
             }
-        }
-
-        function sadMessage() {
-            document.getElementById('mainContainer').innerHTML = `
-                <h1 style="font-size: 2rem; color: #666;">Oh no... 💔</h1>
-                <p>My heart is breaking...</p>
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWY5MGY0YzU0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9iZCZjdD1n/9Y5BbDSkSTiY8/giphy.gif" alt="Sad" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
-                <button class="btn" onclick="safeClick(event, () => location.reload())" style="background: #ddd; color: #333;">Try Again?</button>
-            `;
         }
     </script>
 </body>
