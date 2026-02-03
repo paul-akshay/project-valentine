@@ -6,19 +6,9 @@
     <title>Valentine's Proposal</title>
     
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8512c048-3265-4668-a5fe-3b3e00223271"></script>
-<script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
-
-<script type="text/javascript">
-    document.getElementById('aclib').onload = function() {
-        aclib.runAutoTag({
-            zoneId: 'gcspbvx55w',
-        });
-    };
-</script>
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
         * { box-sizing: border-box; }
         body {
@@ -74,8 +64,6 @@
             width: 100%;
             display: none; 
         }
-        .coffee-box h3 { color: #d63384; margin-bottom: 5px; font-size: 1.1rem; }
-        .coffee-box p { font-size: 0.85rem; color: #444; line-height: 1.4; }
         .coffee-btn {
             background: #ff4d6d;
             color: white;
@@ -90,6 +78,16 @@
             margin-top: 10px;
         }
         .action-btn { width: 100%; margin: 5px 0; font-size: 0.9rem; }
+        
+        /* Share Button Specific Style */
+        .share-btn {
+            background: #25D366; /* WhatsApp Green */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
         footer {
             margin-top: 30px;
@@ -109,6 +107,7 @@
             </label>
             <button class="btn" id="generateBtn" onclick="generateLink()" style="background: #d63384; color: white; width: 100%; margin: 0;">Generate Link</button>
             <p id="resultLink" style="word-break: break-all; color: #d63384; font-weight: bold; margin-top: 15px; font-size: 0.9rem;"></p>
+            
             <div class="coffee-box" id="coffeeBox">
                 <h3>🍀 Boost Your Luck?</h3>
                 <p>Buying the developer a coffee grants <b>+100 Karma</b>.</p>
@@ -125,13 +124,13 @@
         </div>
     </div>
 
-<footer>
-    <a href="https://hits.seeyoufarm.com">
-        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemylove.info&count_bg=%23ff4d6d&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" 
-             alt="Hits Counter" 
-             onerror="this.style.display='none'">
-    </a>
-</footer>
+    <footer>
+        <a href="https://hits.seeyoufarm.com">
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemylove.info&count_bg=%23ff4d6d&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" 
+                 alt="Hits Counter" 
+                 onerror="this.style.display='none'">
+        </a>
+    </footer>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -139,10 +138,14 @@
         const sName = urlParams.get('sender');
         const restrictNo = urlParams.get('no') === 'true';
 
+        // IMPORTANT: Replace USERNAME and REPO with your actual GitHub details
+        const GITHUB_IMG_URL = "https://raw.githubusercontent.com/USERNAME/REPO/main/proposal_accepted_1.png";
+
         if (vName) {
             document.getElementById('setup').classList.add('hidden');
             document.getElementById('proposal').classList.remove('hidden');
             document.getElementById('displayMessage').innerText = `${vName}, will you be my Valentine? ❤️`;
+            
             const noBtn = document.getElementById('noBtn');
             if (restrictNo) {
                 noBtn.onmouseover = () => {
@@ -160,8 +163,10 @@
             const sender = document.getElementById('senderName').value;
             const isUnclickable = document.getElementById('unclickableNo').checked;
             if (!name || !sender) return alert("Please enter both names first!");
+            
             const baseUrl = window.location.origin + window.location.pathname;
             const finalUrl = `${baseUrl}?name=${encodeURIComponent(name)}&sender=${encodeURIComponent(sender)}&no=${isUnclickable}`;
+            
             document.getElementById('resultLink').innerHTML = `Copy & send this: <br><a href="${finalUrl}" style="color: #4caf50;">${finalUrl}</a>`;
             document.getElementById('coffeeBox').style.display = 'block';
         }
@@ -174,30 +179,58 @@
                 <div id="captureArea" style="background: white; padding: 10px; border-radius: 15px;">
                     <h1 style="font-size: 2.5rem; margin-bottom: 5px;">YAY!!!</h1>
                     <p style="font-size: 1.2rem; color: #ff4d6d; margin: 5px 0;">Best decision ever!</p>
-                   <img src="yay.gif" alt="Yay GIF" style="width: 100%; max-width: 280px; border-radius: 15px; margin: 15px 0;">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHI1bmZ6eHpxZnd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9iZCZjdD1n/l0HlIDU8PZEn8OupO/giphy.gif" alt="Yay GIF" style="width: 100%; max-width: 280px; border-radius: 15px; margin: 15px 0;">
                     <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2rem; color: #d63384; margin-bottom: 0;">I love you! ❤️</h2>
                     <h2 style="font-family: 'Brush Script MT', cursive; font-size: 2.2rem; color: #d63384; margin-top: 0;">${senderDisplay}</h2>
                 </div>
                 <div style="margin-top: 15px;">
-                    <button class="btn action-btn" onclick="downloadImage()" style="background: #333; color: white;"> Share with your love!</button>
+                    <button id="shareBtn" class="btn action-btn share-btn" onclick="handleShare()">
+                        <span>📤</span> Share our moment!
+                    </button>
                 </div>
             `;
         }
 
-        async function downloadImage() {
-            const element = document.getElementById('captureArea');
-            const canvas = await html2canvas(element, { useCORS: true, backgroundColor: "#ffffff" });
-            const link = document.createElement('a');
-            link.download = 'proposal-accepted.png';
-            link.href = canvas.toDataURL("image/png");
-            link.click();
+        async function handleShare() {
+            const btn = document.getElementById('shareBtn');
+            const originalText = btn.innerHTML;
+            btn.innerText = "Preparing...";
+
+            try {
+                // Fetch the image from GitHub
+                const response = await fetch(GITHUB_IMG_URL);
+                if (!response.ok) throw new Error('Image fetch failed');
+                const blob = await response.blob();
+                const file = new File([blob], 'proposal_accepted_1.png', { type: 'image/png' });
+
+                // Try Web Share API (Mobile)
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Proposal Accepted!',
+                        text: 'We are officially Valentines! ❤️'
+                    });
+                } else {
+                    // Fallback: Download for Desktop
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'proposal_accepted_1.png';
+                    link.click();
+                    alert("Sharing directly isn't supported on this browser, so I've downloaded the image for you to send manually! 💝");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Could not load the image from GitHub. Make sure the link is correct!");
+            } finally {
+                btn.innerHTML = originalText;
+            }
         }
 
         function sadMessage() {
             document.getElementById('mainContainer').innerHTML = `
                 <h1 style="font-size: 2rem; color: #666;">Oh no... 💔</h1>
                 <p>My heart is breaking...</p>
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWY5MGY0YzU0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9iZCZjdD1n/9Y5BbDSkSTiY8/giphy.gif" alt="Sad" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
+                <img src="https://media.giphy.com/media/9Y5BbDSkSTiY8/giphy.gif" alt="Sad" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
                 <button class="btn" onclick="location.reload()" style="background: #ddd; color: #333;">Try Again?</button>
             `;
         }
