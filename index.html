@@ -9,12 +9,10 @@
     <script src="https://quge5.com/88/tag.min.js" data-zone="208095" async data-cfasync="false"></script>
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8512c048-3265-4668-a5fe-3b3e00223271"></script>
     <script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* ... styles remain the same ... */
         * { box-sizing: border-box; }
         body { font-family: 'Arial', sans-serif; background: #ffeff2; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
         .container { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; width: 100%; margin-bottom: 20px; overflow: hidden; }
@@ -55,7 +53,7 @@
             <h1 id="displayMessage">Will you be my Valentine?</h1>
             <div id="buttonContainer">
                 <button class="btn" id="yesBtn" onclick="celebrate()">Yes</button>
-                <button class="btn" id="noBtn" onclick="sadMessage()">No</button>
+                <button class="btn" id="noBtn" onclick="safeClick(event, sadMessage)">No</button>
             </div>
         </div>
     </div>
@@ -67,21 +65,18 @@
     </footer>
 
     <script>
-        // Use a flag to ensure the ad only triggers once
-        let adTriggered = false;
-
+        // 2. AD TRIGGER FUNCTION
         function triggerAd() {
-            if (!adTriggered && typeof aclib !== 'undefined') {
+            if (typeof aclib !== 'undefined') {
                 aclib.runAutoTag({
                     zoneId: 'gcspbvx55w',
                 });
-                adTriggered = true;
             }
         }
 
         function safeClick(e, callback) {
             e.stopPropagation();
-            callback();
+            if (callback) callback();
         }
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -119,7 +114,7 @@
         }
 
         function celebrate() {
-            // TRIGGER THE AD HERE
+            // 3. TRIGGER AD ONLY ON "YES" CLICK
             triggerAd();
 
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
@@ -139,36 +134,26 @@
             `;
         }
 
+        // ... remaining functions (sadMessage, shareOrDownload) stay the same ...
         function sadMessage() {
             document.getElementById('mainContainer').innerHTML = `
                 <h1 style="font-size: 2rem; color: #666;">Oh no... 💔</h1>
                 <p>My heart is breaking...</p>
-                <img src="https://media.giphy.com/media/9Y5BbDSkSTiY8/giphy.gif" alt="Sad" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWY5MGY0YzU0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0Y2Y0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9iZCZjdD1n/9Y5BbDSkSTiY8/giphy.gif" alt="Sad" style="width: 100%; max-width: 250px; border-radius: 15px; margin: 15px 0;">
                 <button class="btn" onclick="location.reload()" style="background: #ddd; color: #333;">Try Again?</button>
             `;
         }
-
         async function shareOrDownload() {
             const imageUrl = "https://bemylove.info/proposal_accepted_1.png";
-            const shareTitle = "YES! ❤️";
-            const shareText = "With all my heart, I accept!";
-
             if (navigator.share) {
                 try {
                     const response = await fetch(imageUrl);
                     const blob = await response.blob();
                     const file = new File([blob], 'proposal.png', { type: 'image/png' });
-                    await navigator.share({ title: shareTitle, text: shareText, files: [file] });
+                    await navigator.share({ title: "YES! ❤️", text: "I accept!", files: [file] });
                 } catch (err) {
-                    navigator.share({ title: shareTitle, text: shareText, url: window.location.href }).catch(console.error);
+                    navigator.share({ title: "YES! ❤️", url: window.location.href }).catch(console.error);
                 }
-            } else {
-                const link = document.createElement('a');
-                link.href = imageUrl;
-                link.download = 'proposal-accepted.png';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
             }
         }
     </script>
